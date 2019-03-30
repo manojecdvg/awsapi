@@ -4,6 +4,8 @@
 <?php 
 include("include.php");
 include("include1.php");
+$query = $this->doctrine->em->createQuery ( "SELECT d FROM Entity\\User d where d.uid='$uid'" );
+$users = $query->getResult ();
 ?>
 <link rel="stylesheet" href="<?php echo base_url();?>css/client/validationEngine.jquery.css" type="text/css"/>
 <link rel="stylesheet" href="<?php echo base_url();?>css/client/template.css" type="text/css"/>
@@ -45,130 +47,12 @@ display:hover, tr.selected {
 	border: 1px solid transparent;
 	padding: 0.3em;
 }
-
-
-.ui-tabs-vertical {
-	width: 100%;
-}
-
-.ui-tabs-vertical .ui-tabs-nav {
-	padding: .2em .1em .2em .2em;
-	float: left;
-	width: 15em;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li {
-	clear: left;
-	width: 100%;
-	border-bottom-width: 1px !important;
-	border-right-width: 0 !important;
-	margin: 0 -1px .2em 0;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li a {
-	display: block;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
-	padding-bottom: 0;
-	padding-right: .1em;
-	border-right-width: 1px;
-	border-right-width: 1px;
-}
-
-.ui-tabs-vertical .ui-tabs-panel {
-	padding: 1em;
-	float: left;
-	width: 70em;
-}
-li.ui-state-default.ui-state-hidden[role=tab]:not(.ui-tabs-active) {
-    display: none;
-  }
-
 -->
 </style>
 <script type="text/javascript" charset="utf-8">
 		var asInitVals = new Array();
 			$(document).ready(function() {
-				
-	 function updateTips(id, t ,o) {
-id.text( t ).addClass( "ui-state-highlight" );
-o.val(t)
-o.addClass( "ui-state-error" );
-o.focus()
-setTimeout(function() {
-id.removeClass( "ui-state-highlight", 1500 );
-o.removeClass( "ui-state-error" );
-o.val('')
-}, 2000 );
-}
-
- $('#month').datepicker({
-    changeMonth: true,
-    changeYear: true,
-    dateFormat: 'MM yy',
-maxDate: "-1M",
-   viewMode: "months", 
-   minViewMode: "months",
-    onClose: function () {
-      var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-
-      var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-
-      $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-      $(this).datepicker('refresh');
-    },
-
-    beforeShow: function () {
-      if ((selDate = $(this).val()).length > 0) 
-      {
-        iYear = selDate.substring(selDate.length - 4, selDate.length);
-
-        iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), $(this).datepicker('option', 'monthNames'));
-
-        $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
-        $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-      }
-    }
-  });
-
-   $("#month").focus(function () {
-      $(".ui-datepicker-calendar").hide();
-      $("#ui-datepicker-div").position({
-          my: "center top",
-          at: "center bottom",
-          of: $(this)
-      });
-   });
-
-   $("#month").blur(function () {
-     $(".ui-datepicker-calendar").hide();
-   });	
-
- function split( val ) {
-return val.split( /,\s*/ );
-}
-function extractLast( term ) {
-return split( term ).pop();
-}
-
-	
-		
-		
-
-
-	
-	
-	
-
-
-
- 
-//$( "#dob" ).datepicker();	
-	
-	
-									   
-				var oTable = $('#phonebook').dataTable( {
+var oTable = $('#phonebook').dataTable( {
 			
 					"sDom": 'RC<"clear">rtip',
 					//"sScrollY": $(window).height()-190,
@@ -188,7 +72,7 @@ return split( term ).pop();
 					"bDeferRender": true,
 					"sServerMethod": "POST",
 				    "aLengthMenu": [10, 15],
-					"aaSorting": [[ 5, "desc" ],[ 6, "asc" ]],
+					"aaSorting": [[ 0, "desc" ]],
 					"sAjaxSource": '<?php echo base_url();?>index.php/phonebook/userContactAjax/'+<?php echo $uid; ?>,
 					"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 			            /* Append the grade to the default row class name */
@@ -245,7 +129,7 @@ return split( term ).pop();
 				              ]
 				} );
 				
-					$( "#check" )
+					$( "#add" )
 					.button({
 icons: {
 primary: "ui-icon-document"
@@ -357,7 +241,7 @@ primary: "ui-icon-arrowreturn-1-w"
 						
 						
 						
-				$( "#reject" )
+				$( "#delete" )
 					.button({
 icons: {
 primary: "ui-icon-arrowreturn-1-w"
@@ -395,107 +279,10 @@ primary: "ui-icon-arrowreturn-1-w"
 						
 						
 						});		
-												
-						
-						
-					
-						
-						
-				
-				
-			
-
-
-
-
-
-$("#dialog-confirm").dialog({
-     autoOpen: false,
-     modal: true,
-	 
-	
-     buttons : {
-          "Yes" : function(event) {
-                    
-					
-					 $( "#dialog-confirm").dialog( "close" );
-					
-				
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
-							$("#dialog-form-add .validateTips").html('Please Wait .... Generating Report')
-							event.preventDefault();
-							$.ajax({
-						        type: "POST",
-								dataType:"json",
-						        data:{'form': $("#frmadd").serialize()},
-						        url: "<?php echo base_url()?>index.php/research/generate",
-						        success: function(data)
-						        {   
-						          
-							        	      if(data.response==1){
-								oTable.fnDraw();
-							        	   $( "#dialog-form-add").dialog( "close" );
-									
-										    $( "#dialog-form-success #dvmess" ).html(data.msg)
-										   $( "#dialog-form-success" ).dialog( "open" );
-							        	   
-							           }
-									    else if(data.response==2){
-											oTable.fnDraw();
-										//  jQuery(".ui-dialog-buttonpane button:contains('Generate')").attr("disabled", true).addClass("ui-state-disabled");
-										//  $("#frmadd #"+data.field).focus();
-							//  jQuery("#frmadd #"+data.field).validationEngine('showPrompt', data.msg, 'error', true)
-							 $( "#dialog-form-add" ).dialog( "close" );
-								 $( "#dialog-form-error #dvmess" ).html(data.msg)
-											  $( "#dialog-form-error" ).dialog( "open" );
-							           }
-									   
-							           else								      
-							        	  {
-											// 
-									
-  oTable.fnDraw();
-											 o=$('#dialog-form-add #'+data.field+'')
-									   		  $("#frmadd #"+data.field).focus();
-							  jQuery("#frmadd #"+data.field).validationEngine('showPrompt', data.msg, 'error', true)
-											  
-										  } 	
-
-						        }, error: function () {
-									$("#dialog-form-add .validateTips").html('Unable To Connect Server, Please Contact System Administrator') 
-
-  }
-						    });
-						
-				   
-				   	
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					 
-          },
-          "No" : function() {
-            $(this).dialog("close");
-          }
-        }
-      });
-
-
-	
-
 	
 				
 var forms='';
-				
-			
-			
-			
+
 	$( "#dialog-form-error" ).dialog({
 					autoOpen: false,
 					height: 175,
@@ -537,15 +324,7 @@ var forms='';
 					}
 				});
 		
-		
-		
-		
-			
-		
-		
-		
-		
-			var extra_data = "";
+var extra_data = "";
 		$(document).ajaxStop($.unblockUI);	
 			$( "#dialog-form-add" ).dialog({
 					autoOpen: false,
@@ -569,7 +348,7 @@ var forms='';
                text: "Submit",
                "class": 'submitButton',
                click: function(event) {
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
+				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />please wait...</h2>' });  
 							$("#dialog-form-add .validateTips").html('Please Wait ....')
 							event.preventDefault();
 							$.ajax({
@@ -674,7 +453,7 @@ var forms='';
                text: "Submit",
                "class": 'submitButton',
                click: function(event) {
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
+				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />please wait...</h2>' });  
 							$("#dialog-form-add .validateTips").html('Please Wait ....')
 							event.preventDefault();
 							$.ajax({
@@ -858,25 +637,7 @@ var forms='';
 			
 			
 			
-		$( "#dialog-form-csv" ).dialog({
-					autoOpen: false,
-					height: 270,
-					width: 620,
-					title:"Download CSV",
-					modal: true,
-					buttons: {
-					
-						"Close": function() {
-							$( this ).dialog( "close" );
-								oTable.fnDraw();
-							//location.reload();
-						}
-					},
-					close: function() {
-						//allFields.val( "" ).removeClass( "ui-state-error" );
-					}
-				});	
-				
+		
 			
 			
 			
@@ -986,7 +747,7 @@ $('#idsCheck').val('')
 
 
 
-				$( "#create" )
+				$( "#back" )
 					.button({
 icons: {
 primary: "ui-icon-document"
@@ -1021,11 +782,6 @@ primary: "ui-icon-document"
 
 
 
-
-
-<div id="dialog-confirm" title="Rerun Benchmark?" style="display:none">
-  Are You Sure You Want to Rerun Benchmark?
-</div>
 
 
 
@@ -1104,7 +860,7 @@ primary: "ui-icon-document"
 
 
 		<form id='frmedit' name="frmedit" class="formular validationEngineContainer">
-     
+     <p>
     
 	
 		<label for="first_name">First Name<font color="#FF0000"> *</font>
@@ -1134,7 +890,7 @@ primary: "ui-icon-document"
 
 <div id="dialog-form-add-contact" style="display:none" >
 
-
+<p>
 		<form id='frmaddcontact' name="frmaddcontact" class="formular validationEngineContainer">
      
     <input name="uid" id="uid" type="hidden" style="display:none" value="<?php echo $uid; ?>" readonly>
@@ -1181,21 +937,18 @@ primary: "ui-icon-document"
 
 
 	
-<div id="dialog-form-upload-file"  style="display: none">
-<iframe id='uploadiframe-file' src=""></iframe> 
-</div>      
-    
-<div id="dialog-form-xls"  style="display: none">
-<iframe id='xlsiframe' src=""></iframe> 
-</div> 	
+	
 <br>
-<button id="create"  class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Back</button>
-<button id="check" class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Add Contact</button>
-<button id="reject" class="cancelButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Delete</button>
+<button id="back"  class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Back</button>
+<button id="add" class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Add Contact</button>
+<button id="delete" class="cancelButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Delete</button>
 
 
 <br>
 	<br>
+    <h1> <span class="glyphicon glyphicon-list-alt"> </span> User Name : <?php echo $users[0]->getFirstName().' '.$users[0]->getLastName();?>
+
+		  </h1>
 <input name="idsCheck" id="idsCheck" type="hidden" style="display:none">
 <table cellpadding="1" cellspacing="1" border="0" class="display"
 		id="phonebook" width="100%">
@@ -1221,16 +974,16 @@ primary: "ui-icon-document"
 					value="Search By Vacancy" class="search_init" /></th>
 			<th><input type="hidden" name="search_edit"
 					value="Search By Vacancy" class="search_init" /></th>
-			<th><input type="hidden" name="search_vae" value="Search By Vacancy"
+			<th><input type="hidden" name="search_vae" value=""
 					class="search_init" /></th>
-                    <th><input name="search_Code" type="text" class="search_init" 
-					value="" /></th>
+              <th><input name="search_Code" type="text" class="search_init" 
+					value="Search By Firstname" /></th>
 				<th><input name="search_name2" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By Lastname" /></th>
 				<th><input name="search_name" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By ContactNo." /></th>
 				<th><input name="search_name3" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By email" /></th>
 			</tr>
 		</tfoot>
 	</table>

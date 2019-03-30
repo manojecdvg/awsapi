@@ -103,15 +103,46 @@ class phonebook extends CI_Controller
     public function addUser()
     {
         $this->formatPostData();
-        // $this->data = array('firstName' => 'test','lastName' => 'user');
+        $this->load->helper('email');
+		if ($this->data ['firstName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Firstname', "field" => 'firstName' ) );
+			die ();
+		
+		} else if ($this->data ['lastName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Lastname', "field" => 'firstName' ) );
+			die ();
+		
+		}
+		else if ($this->data ['mobileNo'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Contact Number', "field" => 'mobileNo' ) );
+			die ();
+		
+		}
+		else if ($this->data ['email'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter an email id', "field" => 'email' ) );
+			die ();
+		
+		}
+		else if(!valid_email($this->data ['email'])){
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Not valid email id', "field" => 'email' ) );
+			die ();
+		}
+		else{
         $user = new Entity\User($this->data);
         $this->doctrine->em->persist($user);
         $this->doctrine->em->flush();
         echo json_encode(array(
             "response" => 1,
-            "msg" => 'New User Added',
+            "msg" => 'New User Added!!!',
             "field" => 'comments'
         ));
+		
+		}
     }
 
     public function editUser()
@@ -119,7 +150,35 @@ class phonebook extends CI_Controller
         $this->formatPostData();
         $uid = $this->input->post('uid');
 
-
+  $this->load->helper('email');
+		if ($this->data ['firstName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Firstname', "field" => 'firstName' ) );
+			die ();
+		
+		} else if ($this->data ['lastName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Lastname', "field" => 'firstName' ) );
+			die ();
+		
+		}
+		else if ($this->data ['mobileNo'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Contact Number', "field" => 'mobileNo' ) );
+			die ();
+		
+		}
+		else if ($this->data ['email'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter an email id', "field" => 'email' ) );
+			die ();
+		
+		}
+		else if(!valid_email($this->data ['email'])){
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Not valid email id', "field" => 'email' ) );
+			die ();
+		}
         $query = $this->doctrine->em->createQuery("SELECT u FROM Entity\\User u WHERE u.uid='$uid'");
         $user = $query->getResult();
         foreach ($this->data as $key => $value) {
@@ -177,6 +236,41 @@ class phonebook extends CI_Controller
     public function addUserContact()
     {
         $this->formatPostData();
+		  $this->load->helper('email');
+		  if ($this->data ['uid'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Select the Username', "field" => 'uid' ) );
+			die ();
+		
+		}
+		else if ($this->data ['firstName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Firstname', "field" => 'firstName' ) );
+			die ();
+		
+		} else if ($this->data ['lastName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Lastname', "field" => 'firstName' ) );
+			die ();
+		
+		}
+		else if ($this->data ['mobileNo'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Contact Number', "field" => 'mobileNo' ) );
+			die ();
+		
+		}
+		else if ($this->data ['email'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter an email id', "field" => 'email' ) );
+			die ();
+		
+		}
+		else if(!valid_email($this->data ['email'])){
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Not valid email id', "field" => 'email' ) );
+			die ();
+		}
         $uid = $this->doctrine->em->getRepository ( 'Entity\User' )->findOneByUid ( $this->data ['uid'] );
         // $this->data = array('firstName' => 'test','lastName' => 'user');
         $this->data['uid']=$uid;
@@ -193,6 +287,35 @@ class phonebook extends CI_Controller
     public function editUserContact()
     {
         $this->formatPostData();
+		  $this->load->helper('email');
+		if ($this->data ['firstName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Firstname', "field" => 'firstName' ) );
+			die ();
+		
+		} else if ($this->data ['lastName'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Lastname', "field" => 'firstName' ) );
+			die ();
+		
+		}
+		else if ($this->data ['mobileNo'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter Contact Number', "field" => 'mobileNo' ) );
+			die ();
+		
+		}
+		else if ($this->data ['email'] == '') {
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Enter an email id', "field" => 'email' ) );
+			die ();
+		
+		}
+		else if(!valid_email($this->data ['email'])){
+			
+			echo json_encode ( array ("response" => 0, "msg" => 'Not valid email id', "field" => 'email' ) );
+			die ();
+		}
         $id = $this->input->post('uid');
         // $this->data = array('email' => 'test@gmail.com','mobileNo' => '12345');
 

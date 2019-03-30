@@ -6,7 +6,7 @@
 <script type="text/javascript"  src="<?php echo base_url();?>js/jquery.multiselect.js"></script>
 <script type="text/javascript"  src="<?php echo base_url();?>js/jquery.multiselect.filter.js"></script>
 <script type="text/javascript"  src="<?php echo base_url();?>js/jquery.blockUI.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>js/fg.menu.js"></script>
+
 <script type="text/javascript">
 var baseURL = "<?php echo base_url(); ?>";
 </script>

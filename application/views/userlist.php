@@ -47,44 +47,6 @@ display:hover, tr.selected {
 }
 
 
-.ui-tabs-vertical {
-	width: 100%;
-}
-
-.ui-tabs-vertical .ui-tabs-nav {
-	padding: .2em .1em .2em .2em;
-	float: left;
-	width: 15em;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li {
-	clear: left;
-	width: 100%;
-	border-bottom-width: 1px !important;
-	border-right-width: 0 !important;
-	margin: 0 -1px .2em 0;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li a {
-	display: block;
-}
-
-.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
-	padding-bottom: 0;
-	padding-right: .1em;
-	border-right-width: 1px;
-	border-right-width: 1px;
-}
-
-.ui-tabs-vertical .ui-tabs-panel {
-	padding: 1em;
-	float: left;
-	width: 70em;
-}
-li.ui-state-default.ui-state-hidden[role=tab]:not(.ui-tabs-active) {
-    display: none;
-  }
-
 -->
 </style>
 <script type="text/javascript" charset="utf-8">
@@ -158,7 +120,7 @@ return split( term ).pop();
 				              ]
 				} );
 				
-					$( "#check" )
+					$( "#addcontact" )
 					.button({
 icons: {
 primary: "ui-icon-document"
@@ -334,7 +296,7 @@ $("#dialog-confirm").dialog({
 					 $( "#dialog-confirm").dialog( "close" );
 					
 				
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
+				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />please wait...</h2>' });  
 							$("#dialog-form-add .validateTips").html('Please Wait .... Generating Report')
 							event.preventDefault();
 							$.ajax({
@@ -482,7 +444,7 @@ var forms='';
                text: "Submit",
                "class": 'submitButton',
                click: function(event) {
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
+				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />please wait...</h2>' });  
 							$("#dialog-form-add .validateTips").html('Please Wait ....')
 							event.preventDefault();
 							$.ajax({
@@ -587,7 +549,7 @@ var forms='';
                text: "Submit",
                "class": 'submitButton',
                click: function(event) {
-				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />Your file is being generated, please wait...</h2>' });  
+				   $.blockUI({ message: '<h2><img src="<?php echo base_url()?>/img/ajax-loader_2.gif" />please wait...</h2>' });  
 							$("#dialog-form-add .validateTips").html('Please Wait ....')
 							event.preventDefault();
 							$.ajax({
@@ -771,24 +733,7 @@ var forms='';
 			
 			
 			
-		$( "#dialog-form-csv" ).dialog({
-					autoOpen: false,
-					height: 270,
-					width: 620,
-					title:"Download CSV",
-					modal: true,
-					buttons: {
-					
-						"Close": function() {
-							$( this ).dialog( "close" );
-								oTable.fnDraw();
-							//location.reload();
-						}
-					},
-					close: function() {
-						//allFields.val( "" ).removeClass( "ui-state-error" );
-					}
-				});	
+		
 				
 			
 			
@@ -993,7 +938,7 @@ primary: "ui-icon-document"
     
 <div id="dialog-form-add" style="display:none" >
 
-
+<p>
 		<form id='frmadd' name="frmadd" class="formular validationEngineContainer">
      
     
@@ -1022,7 +967,7 @@ primary: "ui-icon-document"
 
 <div id="dialog-form-edit" style="display:none" >
 
-
+<p>
 		<form id='frmedit' name="frmedit" class="formular validationEngineContainer">
      
     
@@ -1054,7 +999,7 @@ primary: "ui-icon-document"
 
 <div id="dialog-form-add-contact" style="display:none" >
 
-
+<p>
 		<form id='frmaddcontact' name="frmaddcontact" class="formular validationEngineContainer">
      
      <label for="first_name">User Name<font color="#FF0000"> *</font>
@@ -1119,7 +1064,7 @@ primary: "ui-icon-document"
 <br>
 
 <button id="create"  class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add User</button>
-<button id="check" class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Add Contact</button>
+<button id="addcontact" class="submitButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Add Contact</button>
 <button id="reject" class="cancelButton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >Delete</button>
 
 
@@ -1152,16 +1097,16 @@ primary: "ui-icon-document"
 					value="Search By Vacancy" class="search_init" /></th>
 			<th><input type="hidden" name="search_edit"
 					value="Search By Vacancy" class="search_init" /></th>
-			<th><input type="hidden" name="search_vae" value="Search By Vacancy"
+			<th><input type="hidden" name="search_vae" value=""
 					class="search_init" /></th>
                     <th><input name="search_Code" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By Firstname" /></th>
 				<th><input name="search_name2" type="text" class="search_init" 
-					value="" /></th>
+					value="Search ByLastname" /></th>
 				<th><input name="search_name" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By ContactNo." /></th>
 				<th><input name="search_name3" type="text" class="search_init" 
-					value="" /></th>
+					value="Search By email" /></th>
 			</tr>
 		</tfoot>
 	</table>
